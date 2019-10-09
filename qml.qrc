@@ -9,5 +9,6 @@
         <file>ImpactLabel-lVYZ.ttf</file>
         <file>PIDControllersView.qml</file>
         <file>GraphView.qml</file>
+        <file>Cantarell-Regular.ttf</file>
     </qresource>
 </RCC>

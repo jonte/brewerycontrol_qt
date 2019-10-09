@@ -33,7 +33,7 @@ Item {
         id: chartView
         title: vesselName + " temperature"
         anchors.fill: parent
-        
+
         LineSeries {
             id: powerSeries
             name: "Power"

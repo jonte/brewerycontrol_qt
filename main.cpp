@@ -10,13 +10,16 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QApplication app(argc, argv);
+    QFontDatabase fontDatabase;
 
-    QString fonts[] = {":/Segment7Standard.otf", ":/ImpactLabel-lVYZ.ttf"};
+    QString fonts[] = {":/Segment7Standard.otf", ":/ImpactLabel-lVYZ.ttf", ":/Cantarell-Regular.ttf"};
     for (QString font: fonts) {
         if (QFontDatabase::addApplicationFont(font) < 0) {
             qWarning() << "Failed to load font: " << font;
         }
     }
+
+    app.setFont(QFont("Cantarell"));
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

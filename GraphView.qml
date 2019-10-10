@@ -5,6 +5,7 @@ import QtCharts 2.3
 Item {
     id: graphView
     property string vesselName
+    property string vesselId
     property int maxPoints: settings.value("maxChartPoints", 50)
     property int pointRemoveChunkSize: settings.value("pointRemoveChunkSize", 1)
     property int pointCount: 0
@@ -25,7 +26,7 @@ Item {
     }
     
     function addChartData(vessel, chart) {
-        if (vessel !== vesselName)
+        if (vessel !== vesselId)
             return;
         var milliDate = chart.date * 1000;
 
@@ -44,7 +45,7 @@ Item {
     
     ChartView {
         id: chartView
-        title: vesselName + " temperature"
+        title: vesselName
         anchors.fill: parent
 
         LineSeries {

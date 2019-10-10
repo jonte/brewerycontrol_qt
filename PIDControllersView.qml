@@ -2,69 +2,28 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 
 Item {
+    property alias children: grid
+
     Connections {
         target: eventsource
         onStreamConnected:  errorBorder.visible = false
         onStreamDisconnected:  errorBorder.visible = true
     }
-    
-    PIDController {
-        id: mltPIDController
-        x: 550
-        y: 110
-        vesselId: "mlt"
-        
-        Text {
-            x: 0
-            y: -40
-            width: parent.width
-            height: 36
-            color: "#535353"
-            text: qsTr("MLT")
-            styleColor: "#222121"
-            horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: 30
-            font.family: "Impact Label"
-        }
-    }
-    
-    PIDController {
-        id: hltPIDController
-        x: 275
-        y: 110
-        vesselId: "hlt"
-        
-        Text {
-            x: 0
-            y: -40
-            width: parent.width
-            height: 36
-            color: "#535353"
-            text: qsTr("HLT")
-            horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: 30
-            font.family: "Impact Label"
-        }
-    }
-    
-    PIDController {
-        id: bkPIDController
-        x: 0
-        y: 110
-        vesselId: "bk"
-        
-        Text {
-            x: 0
-            y: -40
-            width: parent.width
-            height: 36
-            color: "#535353"
-            text: qsTr("Boil kettle")
-            horizontalAlignment: Text.AlignHCenter
-            font.family: "Impact Label"
-            font.pixelSize: 30
-        }
-        
-        
+
+    Grid {
+        id: grid
+        spacing: 5
+        anchors.centerIn: parent
+        scale: children.length > 3 ? 0.8 : 1.0
+
+        rows: 2
+        columns: 3
+
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/

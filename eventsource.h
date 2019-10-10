@@ -18,6 +18,7 @@ signals:
     void updatePower(QString vessel, QVariant power);
     void updateHeater(QString vessel, QVariant heater);
     void updateChart(QString vessel, QVariant chart);
+    void updateVessels(QVariant vessels);
     void streamConnected();
     void streamDisconnected();
 

@@ -21,23 +21,33 @@ ApplicationWindow {
         /* Always on top */
     }
 
+    Connections {
+        target: eventsource
+
+        onUpdateVessels: function(vessels) {
+            for (var vessel in vessels) {
+                var id = (vessels[vessel].id)
+                var name = (vessels[vessel].name)
+
+                var component = Qt.createComponent("qrc:/GraphView.qml")
+                if (component.status === Component.Ready) {
+                    component.createObject(stackView, {vesselId: id, vesselName: name});
+                }
+
+                component = Qt.createComponent("qrc:/PIDController.qml")
+                if (component.status === Component.Ready) {
+                    component.createObject(pidControllersView.children, {vesselId: id, vesselName: name});
+                }
+            }
+        }
+    }
+
     SwipeView {
         id: stackView
         anchors.fill: parent
 
         PIDControllersView {
-        }
-
-        GraphView {
-            vesselName: "mlt"
-        }
-
-        GraphView {
-            vesselName: "hlt"
-        }
-
-        GraphView {
-            vesselName: "bk"
+            id: pidControllersView
         }
     }
 

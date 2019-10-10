@@ -20,11 +20,26 @@ EventSource::EventSource(const QUrl url, QObject *parent) :
 
 void EventSource::initialize() {
     QUrl streamUrl = QUrl(m_url.url() + STREAM_ENDPOINT);
+    QUrl vesselUrl = QUrl(m_url.url() + "/vessel");
     m_request = QNetworkRequest(streamUrl);
 
     m_request.setRawHeader(QByteArray("Accept"), QByteArray("text/event-stream"));
     m_request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
     m_request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::AlwaysNetwork); // Events shouldn't be cached
+
+    QNetworkRequest vessels_req = QNetworkRequest(vesselUrl);
+    QNetworkReply *reply = m_nam.get(vessels_req);
+
+    connect(reply, &QNetworkReply::readyRead, [=]() {
+        if (reply->error() != QNetworkReply::NetworkError::NoError) {
+            qWarning() << "Failed to set setpoint";
+        } else {
+            QJsonDocument d = QJsonDocument::fromJson(reply->readAll());
+            emit updateVessels(d.toVariant());
+        }
+
+        reply->deleteLater();
+    });
 
     startStream();
 }

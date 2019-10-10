@@ -28,6 +28,7 @@ public slots:
     void updateHandler(QString label, QVariant message);
     void startStream();
     void setSetpoint(const QString &vessel, double setpoint);
+    void queryVessels();
 
 private:
     QUrl m_url;

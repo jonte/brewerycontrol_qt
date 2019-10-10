@@ -20,15 +20,27 @@ EventSource::EventSource(const QUrl url, QObject *parent) :
 
 void EventSource::initialize() {
     QUrl streamUrl = QUrl(m_url.url() + STREAM_ENDPOINT);
-    QUrl vesselUrl = QUrl(m_url.url() + "/vessel");
     m_request = QNetworkRequest(streamUrl);
 
     m_request.setRawHeader(QByteArray("Accept"), QByteArray("text/event-stream"));
     m_request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
     m_request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::AlwaysNetwork); // Events shouldn't be cached
 
+    queryVessels();
+    startStream();
+}
+
+void EventSource::queryVessels() {
+    QUrl vesselUrl = QUrl(m_url.url() + "/vessel");
+
     QNetworkRequest vessels_req = QNetworkRequest(vesselUrl);
     QNetworkReply *reply = m_nam.get(vessels_req);
+
+    connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), [=](){
+        qDebug() << "Failed to query vessels.. Retrying.";
+        QTimer::singleShot(1000, this, SLOT(queryVessels()));
+        reply->deleteLater();
+    });
 
     connect(reply, &QNetworkReply::readyRead, [=]() {
         if (reply->error() != QNetworkReply::NetworkError::NoError) {
@@ -41,7 +53,6 @@ void EventSource::initialize() {
         reply->deleteLater();
     });
 
-    startStream();
 }
 
 void EventSource::startStream() {

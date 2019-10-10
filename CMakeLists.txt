@@ -16,7 +16,9 @@ find_package(Qt5 COMPONENTS Core Quick Widgets REQUIRED)
 set(SOURCES
     main.cpp
     eventsource.cpp
-    eventsource.h)
+    eventsource.h
+    settings.cpp
+    settings.h)
 
 add_executable(brewerycontrol_qt ${SOURCES} qml.qrc)
 

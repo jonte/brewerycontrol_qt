@@ -5,7 +5,10 @@ import QtCharts 2.3
 Item {
     id: graphView
     property string vesselName
-    
+    property int maxPoints: settings.value("maxChartPoints", 50)
+    property int pointRemoveChunkSize: settings.value("pointRemoveChunkSize", 1)
+    property int pointCount: 0
+
     Connections {
         target: eventsource
         onUpdateChart: graphView.addChartData(vessel, chart);
@@ -17,13 +20,23 @@ Item {
     }
     DateTimeAxis {
         id: dateAxis
+        labelsFont.pointSize: 7
+        format: "HH:mm"
     }
     
     function addChartData(vessel, chart) {
         if (vessel !== vesselName)
             return;
         var milliDate = chart.date * 1000;
-        
+
+        if (pointCount++ >= maxPoints) {
+            tempSeries.removePoints(0, pointRemoveChunkSize)
+            powerSeries.removePoints(0, pointRemoveChunkSize)
+            setpointSeries.removePoints(0, pointRemoveChunkSize)
+
+            pointCount -= pointRemoveChunkSize
+        }
+
         tempSeries.append(milliDate, chart.temperature.temperature)
         powerSeries.append(milliDate, chart.heater_level.power)
         setpointSeries.append(milliDate, chart.setpoint.temperature)

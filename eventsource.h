@@ -18,6 +18,7 @@ signals:
     void updatePower(QString vessel, QVariant power);
     void updateHeater(QString vessel, QVariant heater);
     void updateChart(QString vessel, QVariant chart);
+    void updateMode(QString vessel, QVariant mode);
     void updateVessels(QVariant vessels);
     void streamConnected();
     void streamDisconnected();
@@ -28,6 +29,7 @@ public slots:
     void updateHandler(QString label, QVariant message);
     void startStream();
     void setSetpoint(const QString &vessel, double setpoint);
+    void setMode(const QString &vessel, QString mode);
     void queryVessels();
 
 private:
@@ -40,6 +42,7 @@ private:
     void initialize();
     void emitUpdateEvent(const QString &label, const QString &message);
     QVariant parseJson(const QString &message);
+    void putRequest(const QString &vessel, QByteArray &putData, const QString &endpoint);
 };
 
 #endif // EVENTSOURCE_H

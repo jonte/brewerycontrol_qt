@@ -10,5 +10,8 @@
         <file>PIDControllersView.qml</file>
         <file>GraphView.qml</file>
         <file>Cantarell-Regular.ttf</file>
+        <file>Font Awesome 5 Free-Solid-900.otf</file>
+        <file>Constants.qml</file>
+        <file>qmldir</file>
     </qresource>
 </RCC>

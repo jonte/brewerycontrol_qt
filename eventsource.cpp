@@ -175,15 +175,23 @@ void EventSource::updateHandler(QString label, QVariant message) {
 
 void EventSource::setSetpoint(const QString &vessel, double setpoint) {
     QByteArray d = QString("{\"temperature\": %1, \"unit\": \"C\"}").arg(setpoint).toUtf8();
+    putRequest(vessel, d, "setpoint");
+}
 
-    QUrl setpointUrl = QUrl(m_url.url() + "/vessel/" + vessel + "/setpoint");
+void EventSource::setMode(const QString &vessel, QString mode) {
+    QByteArray d = QString("{\"mode\": \"%1\"}").arg(mode).toUtf8();
+    putRequest(vessel, d, "mode");
+}
+
+void EventSource::putRequest(const QString &vessel, QByteArray &putData, const QString &endpoint) {
+    QUrl setpointUrl = QUrl(m_url.url() + "/vessel/" + vessel + "/" + endpoint);
     QNetworkRequest req = QNetworkRequest(setpointUrl);
     req.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
-    QNetworkReply *reply = m_nam.put(req, d);
+    QNetworkReply *reply = m_nam.put(req, putData);
 
     connect(reply, &QNetworkReply::readyRead, [=]() {
         if (reply->error() != QNetworkReply::NetworkError::NoError) {
-            qWarning() << "Failed to set setpoint";
+            qWarning() << "Failed to set " << endpoint;
         }
 
         reply->deleteLater();

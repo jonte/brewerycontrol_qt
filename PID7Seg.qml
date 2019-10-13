@@ -5,8 +5,8 @@ Rectangle {
     id: rectangle
     width: 230
     height: 85
-    color: "#222121"
-    property color segColor: "#d51919"
+    color: Constants.black
+    property color segColor: Constants.red
     property string label: "SV"
     property double value: 0
     

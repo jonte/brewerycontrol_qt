@@ -9,7 +9,13 @@
 bool loadFonts(QApplication *app) {
     QFontDatabase fontDatabase;
 
-    QString fonts[] = {":/Segment7Standard.otf", ":/ImpactLabel-lVYZ.ttf", ":/Cantarell-Regular.ttf"};
+    QString fonts[] = {
+        ":/Segment7Standard.otf",
+        ":/ImpactLabel-lVYZ.ttf",
+        ":/Cantarell-Regular.ttf",
+        ":/Font Awesome 5 Free-Solid-900.otf"
+    };
+
     for (QString font: fonts) {
         if (QFontDatabase::addApplicationFont(font) < 0) {
             qWarning() << "Failed to load font: " << font;

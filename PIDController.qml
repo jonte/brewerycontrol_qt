@@ -1,8 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Shapes 1.12
 
-
 Item {
+    id: controller
     width: 250
     height: 280
 
@@ -10,12 +10,13 @@ Item {
     property double pv: 0
     property string vesselId
     property string vesselName
+    property string mode: "OFF"
 
     Text {
         id: nameLabel
         width: parent.width
         height: 36
-        color: "#535353"
+        color: Constants.darkDarkGray
         text: vesselName
         horizontalAlignment: Text.AlignHCenter
         font.family: "Impact Label"
@@ -28,10 +29,10 @@ Item {
         y: 40
         width: 250
         height: 235
-        color: "#222121"
+        color: Constants.black
         radius: 21
         border.width: 3
-        border.color: "#dbcfcf"
+        border.color: Constants.gray
 
 
         Connections {
@@ -45,6 +46,7 @@ Item {
             onUpdateHeater: function(vessel, heater) {
                 if (vessel === vesselId) {
                     sv = heater.pid.setpoint.temperature
+                    controller.mode = heater.mode.mode
                 }
             }
         }
@@ -53,7 +55,7 @@ Item {
             id: btnUp
             x: 182
             y: 168
-            iconText: "+"
+            iconText: ""
 
             TapHandler {
                 onTapped: eventsource.setSetpoint(vesselId, sv + 1);
@@ -65,10 +67,23 @@ Item {
             id: btnDown
             x: 8
             y: 168
-            iconText: "-"
+            iconText: ""
             TapHandler {
+                id: tapHandler
                 onTapped: eventsource.setSetpoint(vesselId, sv - 1);
                 onLongPressed:  eventsource.setSetpoint(vesselId, sv - 10);
+            }
+        }
+
+        PIDButton {
+            id: btnGraph
+            x: 95
+            y: 168
+            iconText: ""
+            iconColor: mode == "OFF" ?  Constants.gray : Constants.red
+
+            TapHandler {
+                onTapped: eventsource.setMode(vesselId, mode == "OFF" ? "PID" : "OFF");
             }
         }
 
@@ -86,14 +101,7 @@ Item {
             y: 83
             value: sv
             label: "SV"
-            segColor: "#29d519"
-        }
-
-        PIDButton {
-            id: btnGraph
-            x: 95
-            y: 168
-            iconText: " GRAPH "
+            segColor: Constants.green
         }
     }
 }

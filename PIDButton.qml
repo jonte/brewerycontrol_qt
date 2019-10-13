@@ -1,29 +1,37 @@
-import QtQuick 2.0
+import QtQuick 2.12
 import QtQuick.Shapes 1.12
 
 Rectangle {
     id: btnDown
     width: 60
     height: 60
-    color: "#3a3939"
     radius: 15
     border.width: 3
+    color: Constants.darkDarkGray
+
+    TapHandler {
+        id: tapHandler
+    }
 
     property string iconText: "?"
+    property color iconColor: Constants.gray
+    property string fontFamily: "Cantarell"
 
     Text {
         width: parent.width
         height: parent.height
         anchors.centerIn: parent
-        color: "#dbcfcf"
+        color: tapHandler.pressed ? Qt.darker(iconColor) : iconColor
         text: iconText
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         fontSizeMode: Text.HorizontalFit
-        font.pointSize: 40
+        font.pointSize: Constants.fontSize
     }
-    border.color: "#dbcfcf"
+    border.color: Constants.gray
 }
+
+
 
 /*##^##
 Designer {

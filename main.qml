@@ -7,7 +7,7 @@ ApplicationWindow {
     visible: true
     width: 800
     height: 480
-    color: "#222121"
+    color: Constants.black
 
     Rectangle {
         id: errorBorder
@@ -15,7 +15,7 @@ ApplicationWindow {
         color: "#00000000"
         visible: true
         border.width: 5
-        border.color: "#f04242"
+        border.color: Constants.red
         z: 2000
 
         /* Always on top */
@@ -50,6 +50,7 @@ ApplicationWindow {
             id: pidControllersView
         }
     }
+
 
 
 }

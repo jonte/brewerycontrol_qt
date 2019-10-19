@@ -9,4 +9,14 @@ SwipeView {
     PIDControllersView {
         id: pidControllersView
     }
+
+    PumpControllersView {
+        id: grid
+    }
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/

@@ -3,3 +3,6 @@ singleton Constants 1.0 Constants.qml
 GraphView 1.0 GraphView.qml
 PIDControllersView 1.0 PIDControllersView.qml
 ControllersSwipeView 1.0 ControllersSwipeView.qml
+PIDButton 1.0 PIDButton.qml
+PumpController 1.0 PumpController.qml
+PumpControllersView 1.0 PumpControllersView.qml

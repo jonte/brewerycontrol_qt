@@ -66,9 +66,6 @@ ApplicationWindow {
         anchors.verticalCenter: parent.verticalCenter
 
     }
-
-
-
 }
 
 /*##^##

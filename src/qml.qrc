@@ -13,5 +13,7 @@
         <file>../qml/main.qml</file>
         <file>../qml/BreweryControl/qmldir</file>
         <file>../qml/BreweryControl/ControllersSwipeView.qml</file>
+        <file>../qml/BreweryControl/PumpController.qml</file>
+        <file>../qml/BreweryControl/PumpControllersView.qml</file>
     </qresource>
 </RCC>

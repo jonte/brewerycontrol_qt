@@ -52,6 +52,14 @@ ApplicationWindow {
         }
     }
 
+    PageIndicator {
+        count: swipeView.count
+        currentIndex: swipeView.currentIndex
+
+        anchors.bottom: swipeView.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+    }
+
 
 
 }

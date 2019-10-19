@@ -34,11 +34,6 @@ ApplicationWindow {
                 if (component.status === Component.Ready) {
                     component.createObject(swipeView, {vesselId: id, vesselName: name});
                 }
-
-                component = Qt.createComponent("qrc:/qml/BreweryControl/PIDController.qml")
-                if (component.status === Component.Ready) {
-                    component.createObject(pidControllersView.children, {vesselId: id, vesselName: name});
-                }
             }
         }
     }
@@ -47,17 +42,29 @@ ApplicationWindow {
         id: swipeView
         anchors.fill: parent
 
-        PIDControllersView {
-            id: pidControllersView
+        ControllersSwipeView {
+            id: controllersSwipeView
         }
     }
 
     PageIndicator {
+        id: horizontalPageIndicator
         count: swipeView.count
         currentIndex: swipeView.currentIndex
 
         anchors.bottom: swipeView.bottom
         anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    PageIndicator {
+        rotation: 90
+        id: vertocalPageIndicator
+        count: controllersSwipeView.count
+        currentIndex: controllersSwipeView.currentIndex
+
+        x: -7
+        anchors.verticalCenter: parent.verticalCenter
+
     }
 
 

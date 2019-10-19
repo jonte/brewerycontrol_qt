@@ -12,5 +12,6 @@
         <file>../qml/BreweryControl/PIDButton.qml</file>
         <file>../qml/main.qml</file>
         <file>../qml/BreweryControl/qmldir</file>
+        <file>../qml/BreweryControl/ControllersSwipeView.qml</file>
     </qresource>
 </RCC>

@@ -8,6 +8,18 @@ Item {
         target: eventsource
         onStreamConnected:  errorBorder.visible = false
         onStreamDisconnected:  errorBorder.visible = true
+
+        onUpdateVessels: function(vessels) {
+            for (var vessel in vessels) {
+                var id = (vessels[vessel].id)
+                var name = (vessels[vessel].name)
+
+                var component = Qt.createComponent("qrc:/qml/BreweryControl/PIDController.qml")
+                if (component.status === Component.Ready) {
+                    component.createObject(grid, {vesselId: id, vesselName: name});
+                }
+            }
+        }
     }
 
     Grid {

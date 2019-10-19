@@ -47,6 +47,7 @@ Item {
         id: chartView
         title: vesselName
         anchors.fill: parent
+        anchors.margins: -12
 
         LineSeries {
             id: powerSeries

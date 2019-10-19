@@ -13,19 +13,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Core Quick Widgets REQUIRED)
 
-set(SOURCES
-    main.cpp
-    eventsource.cpp
-    eventsource.h
-    settings.cpp
-    settings.h)
+add_subdirectory(src)
 
-add_executable(brewerycontrol_qt ${SOURCES} qml.qrc)
-
-target_compile_definitions(brewerycontrol_qt
-  PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
-target_link_libraries(brewerycontrol_qt
-  PRIVATE Qt5::Core Qt5::Quick Qt5::Widgets)
-
-install(TARGETS brewerycontrol_qt
-        RUNTIME DESTINATION bin)
+set(QML_IMPORT_PATH "${CMAKE_SOURCE_DIR}/qml" CACHE STRING "Custom QML modules")

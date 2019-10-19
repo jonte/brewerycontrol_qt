@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>../fonts/Cantarell-Regular.ttf</file>
+        <file>../fonts/Font Awesome 5 Free-Solid-900.otf</file>
+        <file>../fonts/ImpactLabel-lVYZ.ttf</file>
+        <file>../fonts/Segment7Standard.otf</file>
+        <file>../qml/BreweryControl/PIDController.qml</file>
+        <file>../qml/BreweryControl/PIDControllersView.qml</file>
+        <file>../qml/BreweryControl/Constants.qml</file>
+        <file>../qml/BreweryControl/GraphView.qml</file>
+        <file>../qml/BreweryControl/PID7Seg.qml</file>
+        <file>../qml/BreweryControl/PIDButton.qml</file>
+        <file>../qml/main.qml</file>
+        <file>../qml/BreweryControl/qmldir</file>
+    </qresource>
+</RCC>

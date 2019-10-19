@@ -10,10 +10,10 @@ bool loadFonts(QApplication *app) {
     QFontDatabase fontDatabase;
 
     QString fonts[] = {
-        ":/Segment7Standard.otf",
-        ":/ImpactLabel-lVYZ.ttf",
-        ":/Cantarell-Regular.ttf",
-        ":/Font Awesome 5 Free-Solid-900.otf"
+        ":/fonts/Segment7Standard.otf",
+        ":/fonts/ImpactLabel-lVYZ.ttf",
+        ":/fonts/Cantarell-Regular.ttf",
+        ":/fonts/Font Awesome 5 Free-Solid-900.otf"
     };
 
     for (QString font: fonts) {
@@ -41,8 +41,10 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     EventSource es(QUrl(settings.value("host", "http://localhost:5000/v1").toString()));
+
+    engine.addImportPath(":/qml");
 
     engine.rootContext()->setContextProperty("eventsource", &es);
     engine.rootContext()->setContextProperty("settings", &settings);

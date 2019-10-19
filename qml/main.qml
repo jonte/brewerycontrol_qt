@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtCharts 2.3
+import BreweryControl 1.0
 
 ApplicationWindow {
     id: window
@@ -29,12 +30,12 @@ ApplicationWindow {
                 var id = (vessels[vessel].id)
                 var name = (vessels[vessel].name)
 
-                var component = Qt.createComponent("qrc:/GraphView.qml")
+                var component = Qt.createComponent("qrc:/qml/BreweryControl/GraphView.qml")
                 if (component.status === Component.Ready) {
                     component.createObject(stackView, {vesselId: id, vesselName: name});
                 }
 
-                component = Qt.createComponent("qrc:/PIDController.qml")
+                component = Qt.createComponent("qrc:/qml/BreweryControl/PIDController.qml")
                 if (component.status === Component.Ready) {
                     component.createObject(pidControllersView.children, {vesselId: id, vesselName: name});
                 }

@@ -32,7 +32,7 @@ ApplicationWindow {
 
                 var component = Qt.createComponent("qrc:/qml/BreweryControl/GraphView.qml")
                 if (component.status === Component.Ready) {
-                    component.createObject(stackView, {vesselId: id, vesselName: name});
+                    component.createObject(swipeView, {vesselId: id, vesselName: name});
                 }
 
                 component = Qt.createComponent("qrc:/qml/BreweryControl/PIDController.qml")
@@ -44,7 +44,7 @@ ApplicationWindow {
     }
 
     SwipeView {
-        id: stackView
+        id: swipeView
         anchors.fill: parent
 
         PIDControllersView {

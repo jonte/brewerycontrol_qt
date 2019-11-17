@@ -46,6 +46,9 @@ ApplicationWindow {
     SwipeView {
         id: swipeView
         anchors.fill: parent
+        currentIndex: 1
+
+        TimersView {}
 
         PIDControllersView {
             id: pidControllersView

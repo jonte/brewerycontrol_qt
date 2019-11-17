@@ -9,6 +9,7 @@ QtObject {
     readonly property color darkDarkGray: Qt.darker(gray,3)
     readonly property color black:  "#222121"
     readonly property color green: "#29d519"
+    readonly property color blue: Qt.lighter("#3066be")
 
     readonly property int fontSize: 40
 }

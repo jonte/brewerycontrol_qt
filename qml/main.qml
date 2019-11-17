@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtCharts 2.3
 import BreweryControl 1.0
+import BreweryControl.Views.Timers 1.0
 
 ApplicationWindow {
     id: window
@@ -46,6 +47,9 @@ ApplicationWindow {
     SwipeView {
         id: swipeView
         anchors.fill: parent
+        currentIndex: 1
+
+        TimersView {}
 
         PIDControllersView {
             id: pidControllersView

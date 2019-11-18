@@ -10,6 +10,6 @@ Grid {
 
     HopTimer {
         initialtimeSec: 10
-        hopName: "Cascadesssss hops"
+        hopName: "Cascade"
     }
 }

@@ -14,5 +14,8 @@
         <file>../qml/BreweryControl/qmldir</file>
         <file>../qml/BreweryControl/TimersView.qml</file>
         <file>../qml/BreweryControl/HopTimer.qml</file>
+        <file>../qml/BreweryControl/LongPressMenu.qml</file>
+        <file>../qml/BreweryControl/SetTimeMenu.qml</file>
+        <file>../qml/BreweryControl/RemainingTime.qml</file>
     </qresource>
 </RCC>

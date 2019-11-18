@@ -3,6 +3,7 @@ import QtQuick 2.12
 
 
 Item {
+    id: root
     width: 200
     height: 200
     property double value: Math.min(0.99999, 1 - (remainingTimeSec / initialtimeSec))
@@ -11,11 +12,18 @@ Item {
     property bool running: false
     property string hopName: "Unknown"
 
-    MouseArea {
-        id: tapHandler
-        anchors.fill: parent
-        onPressed: running = !running
-        onPressAndHold: remainingTimeSec = initialtimeSec
+    function reset() {
+        running = false
+        remainingTimeSec = initialtimeSec
+    }
+
+    function remove() {
+        root.destroy()
+    }
+
+    TapHandler {
+        onTapped: running = !running
+        onLongPressed: longPressMenu.visible = !longPressMenu.visible
     }
 
     Timer {
@@ -25,16 +33,14 @@ Item {
         onTriggered:  remainingTimeSec -= 1
     }
 
-    Text {
+    RemainingTime {
         id: remainingTime
-        font.family: "Segment7"
-        anchors.centerIn: parent
-        text: Math.abs(remainingTimeSec)
-        color: remainingTimeSec < 0 ? Constants.red : Constants.green
-        font.pixelSize: 72
+        anchors.verticalCenter: parent.verticalCenter
+        pixelSize: 60
+        time: remainingTimeSec
 
         OpacityAnimator {
-            target: parent
+            target: remainingTime
             from: 0
             to: 1
             duration: 500
@@ -42,31 +48,30 @@ Item {
         }
     }
 
-    Text {
-        font.family: "Segment7"
-        anchors.top: remainingTime.bottom
-        anchors.horizontalCenter: remainingTime.horizontalCenter
-        text: initialtimeSec
-        color: Constants.red
+    RemainingTime {
+        anchors.bottom: innerRing.bottom
+        anchors.verticalCenterOffset: 60
+        anchors.horizontalCenterOffset: 0
+        anchors.horizontalCenter: parent.horizontalCenter
+        time: initialtimeSec
         opacity: 0.8
-        font.pixelSize: 20
+        pixelSize: 20
     }
 
     Rectangle
     {
         id: outerRing
-        z: 0
         anchors.fill: parent
         radius: Math.max(width, height) / 2
         color: "transparent"
         border.color: Constants.darkGray
         border.width: 16
+
     }
 
     Rectangle
     {
         id: innerRing
-        z: 1
         anchors.fill: parent
         anchors.margins: (outerRing.border.width - border.width) / 2
         radius: outerRing.radius
@@ -97,6 +102,45 @@ Item {
         opacity: 0.8
         font.pixelSize: 40
         elide: Text.ElideRight
-        width: parent.width
+    }
+
+    LongPressMenu {
+        id: longPressMenu
+        visible: false
+        width: innerRing.width - 20
+        height: innerRing.height - 20
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+
+        onResetTapped: {
+            reset()
+            visible = false
+        }
+
+        onRemoveTapped: remove()
+        onGoBackTapped: visible = false
+        onSetTimeTapped: {
+            setTimeMenu.visible = true
+            visible = false
+        }
+    }
+
+    SetTimeMenu {
+        id: setTimeMenu
+        visible: false
+        width: innerRing.width - 20
+        height: innerRing.height - 20
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        value: initialtimeSec
+
+        onAddTapped: initialtimeSec += 60
+        onAddLongTapped: initialtimeSec += 60 * 10
+        onSubTapped: initialtimeSec -= 60
+        onSubLongTapped: initialtimeSec -= 60 * 10
+        onBackTapped: {
+            visible = false
+            reset()
+        }
     }
 }

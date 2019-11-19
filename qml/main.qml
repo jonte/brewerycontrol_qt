@@ -3,6 +3,7 @@ import QtQuick.Controls 2.12
 import QtCharts 2.3
 import BreweryControl 1.0
 import BreweryControl.Views.Timers 1.0
+import BreweryControl.Views.Graphs 1.0
 
 ApplicationWindow {
     id: window
@@ -31,7 +32,7 @@ ApplicationWindow {
                 var id = (vessels[vessel].id)
                 var name = (vessels[vessel].name)
 
-                var component = Qt.createComponent("qrc:/qml/BreweryControl/GraphView.qml")
+                var component = Qt.createComponent("qrc:/qml/BreweryControl/Views/Graphs/GraphView.qml")
                 if (component.status === Component.Ready) {
                     component.createObject(swipeView, {vesselId: id, vesselName: name});
                 }

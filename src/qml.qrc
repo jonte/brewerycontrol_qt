@@ -7,7 +7,6 @@
         <file>../qml/BreweryControl/PIDController.qml</file>
         <file>../qml/BreweryControl/PIDControllersView.qml</file>
         <file>../qml/BreweryControl/Constants.qml</file>
-        <file>../qml/BreweryControl/GraphView.qml</file>
         <file>../qml/BreweryControl/PID7Seg.qml</file>
         <file>../qml/BreweryControl/PIDButton.qml</file>
         <file>../qml/main.qml</file>
@@ -20,5 +19,7 @@
         <file>../qml/BreweryControl/Views/Timers/qmldir</file>
         <file>../qml/BreweryControl/Views/Timers/TimersView.qml</file>
         <file>../qml/BreweryControl/Views/Timers/AddTimerButton.qml</file>
+        <file>../qml/BreweryControl/Views/Graphs/GraphView.qml</file>
+        <file>../qml/BreweryControl/Views/Graphs/qmldir</file>
     </qresource>
 </RCC>

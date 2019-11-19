@@ -1,5 +1,2 @@
 module BreweryControl
 singleton Constants 1.0 Constants.qml
-GraphView 1.0 GraphView.qml
-PIDControllersView 1.0 PIDControllersView.qml
-TimersView 1.0 TimersView.qml

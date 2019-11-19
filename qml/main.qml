@@ -4,6 +4,7 @@ import QtCharts 2.3
 import BreweryControl 1.0
 import BreweryControl.Views.Timers 1.0
 import BreweryControl.Views.Graphs 1.0
+import BreweryControl.Views.PID 1.0
 
 ApplicationWindow {
     id: window
@@ -37,7 +38,7 @@ ApplicationWindow {
                     component.createObject(swipeView, {vesselId: id, vesselName: name});
                 }
 
-                component = Qt.createComponent("qrc:/qml/BreweryControl/PIDController.qml")
+                component = Qt.createComponent("qrc:/qml/BreweryControl/Views/PID/PIDController.qml")
                 if (component.status === Component.Ready) {
                     component.createObject(pidControllersView.children, {vesselId: id, vesselName: name});
                 }

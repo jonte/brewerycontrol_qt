@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Shapes 1.12
+import BreweryControl 1.0
 
 Rectangle {
     id: btnDown

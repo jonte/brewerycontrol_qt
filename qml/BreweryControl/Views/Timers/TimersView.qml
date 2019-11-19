@@ -1,8 +1,10 @@
 import QtQuick 2.0
 import QtGraphicalEffects 1.0
+import BreweryControl 1.0
 import BreweryControl.Timers.HopTimer 1.0
 
 Item {
+    id: element
     Grid {
         id: grid
         transformOrigin: Item.TopLeft
@@ -37,6 +39,19 @@ Item {
 
         active: grid.children.length < 15
         opacity: active ? 1.0 : 0.5
+    }
+
+    Text {
+        id: helpText
+        x: 300
+        y: 293
+        color: Constants.blue
+        text: qsTr("Add a timer by pressing +")
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        horizontalAlignment: Text.AlignHCenter
+        font.pixelSize: 50
+        visible: grid.children.length <= 0
     }
 }
 

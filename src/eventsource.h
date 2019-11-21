@@ -19,6 +19,7 @@ signals:
     void updateHeater(QString vessel, QVariant heater);
     void updateChart(QString vessel, QVariant chart);
     void updateMode(QString vessel, QVariant mode);
+    void updateTimer(QString timerId, QVariant timer);
     void updateVessels(QVariant vessels);
     void streamConnected();
     void streamDisconnected();
@@ -31,6 +32,7 @@ public slots:
     void setSetpoint(const QString &vessel, double setpoint);
     void setMode(const QString &vessel, QString mode);
     void queryVessels();
+    void queryTimers();
 
 private:
     QUrl m_url;

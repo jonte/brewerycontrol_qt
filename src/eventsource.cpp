@@ -3,6 +3,8 @@
 #include <QTimer>
 #include <QDebug>
 #include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 
 #define STREAM_ENDPOINT "/stream"
 
@@ -27,6 +29,7 @@ void EventSource::initialize() {
     m_request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::AlwaysNetwork); // Events shouldn't be cached
 
     queryVessels();
+    queryTimers();
     startStream();
 }
 
@@ -44,10 +47,38 @@ void EventSource::queryVessels() {
 
     connect(reply, &QNetworkReply::readyRead, [=]() {
         if (reply->error() != QNetworkReply::NetworkError::NoError) {
-            qWarning() << "Failed to set setpoint";
+            qWarning() << "Failed to get vessels";
         } else {
             QJsonDocument d = QJsonDocument::fromJson(reply->readAll());
             emit updateVessels(d.toVariant());
+        }
+
+        reply->deleteLater();
+    });
+
+}
+void EventSource::queryTimers() {
+    QUrl timerUrl = QUrl(m_url.url() + "/timer");
+
+    QNetworkRequest timers_req = QNetworkRequest(timerUrl);
+    QNetworkReply *reply = m_nam.get(timers_req);
+
+    connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), [=](){
+        qDebug() << "Failed to query timers.. Retrying.";
+        QTimer::singleShot(1000, this, SLOT(queryTimers()));
+        reply->deleteLater();
+    });
+
+    connect(reply, &QNetworkReply::readyRead, [=]() {
+        if (reply->error() != QNetworkReply::NetworkError::NoError) {
+            qWarning() << "Failed to get timers";
+        } else {
+            QJsonDocument d = QJsonDocument::fromJson(reply->readAll());
+            for (QJsonValue timer : d.array()) {
+                QVariant m = d.toVariant().toMap();
+                QString timerId = timer.toObject().take("id").toString();
+                emit updateTimer(timerId, timer.toVariant());
+            }
         }
 
         reply->deleteLater();
@@ -128,7 +159,7 @@ void EventSource::emitUpdateEvent(const QString &label, const QString &message) 
     QVariant data;
     std::function<void(QString, QVariant)> signal;
 
-    QStringRef vessel = label.splitRef("-").last();
+    QStringRef id = label.splitRef("-").last();
 
 #define fwrap(f) std::bind((f), this, std::placeholders::_1, std::placeholders::_2)
     if (label.startsWith("vessel-temperature-")) {
@@ -143,13 +174,16 @@ void EventSource::emitUpdateEvent(const QString &label, const QString &message) 
     } else if (label.startsWith("vessel-chart-")) {
         data = parseJson(message);
         signal = fwrap(&EventSource::updateChart);
+    } else if (label.startsWith("timer-")) {
+        data = parseJson(message);
+        signal = fwrap(&EventSource::updateTimer);
     } else {
         qWarning() << "Unhandled event type: " << label;
     }
 #undef fwrap
 
     if (signal) {
-        emit signal(vessel.toString(), data);
+        emit signal(id.toString(), data);
     }
 }
 

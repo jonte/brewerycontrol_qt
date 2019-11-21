@@ -5,6 +5,34 @@ import BreweryControl.Timers.HopTimer 1.0
 
 Item {
     id: element
+
+    Connections {
+        target: eventsource
+
+        onUpdateTimer: function(timerId, timer) {
+            console.debug("Timer update: " + timerId + ", " + JSON.stringify(timer))
+            for (var i = 0; i < grid.children.length; i++) {
+                var child = grid.children[i]
+
+                if (child.timerId === timer.id) {
+                    child.hopName = timer.name
+                    child.remainingTimeSec = timer.remainingTime
+                    child.initialTimeSec = timer.initialTime
+                    child.running = timer.running
+                    return;
+                }
+            }
+
+            var component = Qt.createComponent("qrc:/qml/BreweryControl/Timers/HopTimer/HopTimer.qml")
+            component.createObject(grid, {
+                               timerId: timer.id,
+                               hopName: timer.name,
+                               remainingTimeSec: timer.remainingTime,
+                               initialTimeSec: timer.initialTime,
+                               running: timer.running
+                           });
+        }
+    }
     Grid {
         id: grid
         transformOrigin: Item.TopLeft

@@ -7,15 +7,16 @@ Item {
     id: root
     width: 196
     height: 196
-    property double value: Math.min(0.99999, 1 - (remainingTimeSec / initialtimeSec))
-    property double initialtimeSec: 0
-    property double remainingTimeSec: initialtimeSec
+    property string timerId: ""
+    property double value: Math.min(0.99999, 1 - (remainingTimeSec / initialTimeSec))
+    property double initialTimeSec: 0
+    property double remainingTimeSec: initialTimeSec
     property bool running: false
     property string hopName: ""
 
     function reset() {
         running = false
-        remainingTimeSec = initialtimeSec
+        remainingTimeSec = initialTimeSec
     }
 
     function remove() {
@@ -54,7 +55,7 @@ Item {
         anchors.verticalCenterOffset: 60
         anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
-        time: initialtimeSec
+        time: initialTimeSec
         opacity: 0.8
         pixelSize: 20
     }
@@ -122,12 +123,12 @@ Item {
         height: innerRing.height - 20
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        value: initialtimeSec
+        value: initialTimeSec
 
-        onAddTapped: initialtimeSec += 60
-        onAddLongTapped: initialtimeSec += 60 * 10
-        onSubTapped: initialtimeSec -= 60
-        onSubLongTapped: initialtimeSec -= 60 * 10
+        onAddTapped: initialTimeSec += 60
+        onAddLongTapped: initialTimeSec += 60 * 10
+        onSubTapped: initialTimeSec -= 60
+        onSubLongTapped: initialTimeSec -= 60 * 10
         onBackTapped: {
             visible = false
             reset()

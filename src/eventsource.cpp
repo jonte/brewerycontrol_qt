@@ -26,19 +26,41 @@ void EventSource::initialize() {
     m_request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
     m_request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::AlwaysNetwork); // Events shouldn't be cached
 
-    queryVessels();
+    queryEntity(ENTITY_TYPE_VESSEL);
+    queryEntity(ENTITY_TYPE_PUMP);
     startStream();
 }
 
-void EventSource::queryVessels() {
-    QUrl vesselUrl = QUrl(m_url.url() + "/vessel");
+QUrl EventSource::getEntityUrl(EventSource::EntityType type) {
+    switch (type) {
+    case ENTITY_TYPE_VESSEL:
+        return QUrl((m_url.url() + "/vessel"));
+    case ENTITY_TYPE_PUMP:
+        return QUrl((m_url.url() + "/pump"));
 
-    QNetworkRequest vessels_req = QNetworkRequest(vesselUrl);
-    QNetworkReply *reply = m_nam.get(vessels_req);
+    }
+}
+
+void EventSource::emitEntityUpdate(EventSource::EntityType type, QVariant data) {
+    switch (type) {
+    case ENTITY_TYPE_PUMP:
+        emit updatePumps(data);
+        break;
+    case ENTITY_TYPE_VESSEL:
+        emit updateVessels(data);
+        break;
+    }
+}
+
+void EventSource::queryEntity(EventSource::EntityType type) {
+    QUrl entityUrl = getEntityUrl(type);
+
+    QNetworkRequest req = QNetworkRequest(entityUrl);
+    QNetworkReply *reply = m_nam.get(req);
 
     connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), [=](){
-        qDebug() << "Failed to query vessels.. Retrying.";
-        QTimer::singleShot(1000, this, SLOT(queryVessels()));
+        qDebug() << "Failed to query entity.. Retrying.";
+        QTimer::singleShot(1000, std::bind(&EventSource::queryEntity, this, type));
         reply->deleteLater();
     });
 
@@ -47,7 +69,7 @@ void EventSource::queryVessels() {
             qWarning() << "Failed to set setpoint";
         } else {
             QJsonDocument d = QJsonDocument::fromJson(reply->readAll());
-            emit updateVessels(d.toVariant());
+            emitEntityUpdate(type, d.toVariant());
         }
 
         reply->deleteLater();

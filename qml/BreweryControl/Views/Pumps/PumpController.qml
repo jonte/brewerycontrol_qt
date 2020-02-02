@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtCharts 2.3
 import BreweryControl 1.0
+import BreweryControl.Views.PID 1.0
 
 Item {
     property string name

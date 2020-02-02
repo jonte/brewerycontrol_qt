@@ -4,6 +4,21 @@ import QtCharts 2.3
 import BreweryControl 1.0
 
 Item {
+    Connections {
+        target: eventsource
+
+        onUpdatePumps: function(pumps) {
+            for (var pump in pumps) {
+                var id = (pumps[pump].id)
+                var name = (pumps[pump].name)
+
+                var component = Qt.createComponent("qrc:/qml/BreweryControl/Views/Pumps/PumpController.qml")
+                if (component.status === Component.Ready) {
+                    component.createObject(grid, {pumpId: id, name: name});
+                }
+            }
+        }
+    }
     Grid {
         id: grid
         spacing: 5
@@ -12,15 +27,5 @@ Item {
 
         rows: 2
         columns: 3
-
-        PumpController {
-            name: "Pump 1"
-        }
-        PumpController {
-            name: "Pump 2"
-        }
-        PumpController {
-            name: "Pump 3"
-        }
     }
 }

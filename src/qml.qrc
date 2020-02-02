@@ -22,5 +22,8 @@
         <file>../qml/BreweryControl/Views/PID/PID7Seg.qml</file>
         <file>../qml/BreweryControl/Views/PID/PIDButton.qml</file>
         <file>../qml/BreweryControl/Views/PID/PIDController.qml</file>
+        <file>../qml/BreweryControl/Views/Pumps/PumpController.qml</file>
+        <file>../qml/BreweryControl/Views/Pumps/PumpControllersView.qml</file>
+        <file>../qml/BreweryControl/Views/Pumps/qmldir</file>
     </qresource>
 </RCC>

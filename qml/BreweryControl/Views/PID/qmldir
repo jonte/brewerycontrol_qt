@@ -1,2 +1,3 @@
 module PID
 PIDControllersView 1.0 PIDControllersView.qml
+PIDButton 1.0 PIDButton.qml

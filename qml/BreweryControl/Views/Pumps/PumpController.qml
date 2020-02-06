@@ -7,9 +7,20 @@ import BreweryControl.Views.PID 1.0
 Item {
     property string name
     property string mode: "OFF"
+    property string pumpId
 
     width: 200
     height: 200
+
+    Connections {
+        target: eventsource
+
+        onUpdateMode: function(entityId, pumpMode) {
+            if (entityId === pumpId) {
+                mode = pumpMode.mode
+            }
+        }
+    }
 
     Text {
         id: nameLabel
@@ -37,6 +48,7 @@ Item {
             anchors.bottomMargin: 7
             iconText: "\uf011"
             TapHandler {
+                onTapped: eventsource.setPumpMode(pumpId, mode == "OFF" ? "ON" : "OFF");
             }
             iconColor: mode == "OFF" ?  Constants.gray : Constants.red
         }

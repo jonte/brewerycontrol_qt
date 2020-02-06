@@ -10,12 +10,13 @@
 class EventSource : public QObject
 {
     Q_OBJECT
+
+public:
     enum EntityType {
         ENTITY_TYPE_VESSEL,
         ENTITY_TYPE_PUMP
     };
 
-public:
     EventSource(const QUrl url, QObject *parent = nullptr);
 
 signals:
@@ -35,7 +36,8 @@ public slots:
     void updateHandler(QString label, QVariant message);
     void startStream();
     void setSetpoint(const QString &vessel, double setpoint);
-    void setMode(const QString &vessel, QString mode);
+    void setVesselMode(const QString &vessel, const QString &mode);
+    void setPumpMode(const QString &pump, const QString &mode);
     void queryEntity(EntityType type);
 
 private:
@@ -48,10 +50,13 @@ private:
     void initialize();
     void emitUpdateEvent(const QString &label, const QString &message);
     QVariant parseJson(const QString &message);
-    void putRequest(const QString &vessel, QByteArray &putData, const QString &endpoint);
+    void putRequest(EntityType type, const QString &entityId, QByteArray &putData, const QString &endpoint);
     QUrl getEntityUrl(EntityType type);
     void emitEntityUpdate(EventSource::EntityType type, QVariant data);
+    void setMode(EntityType type, const QString &vessel, const QString &mode);
 
 };
+
+QDebug operator<<(QDebug debug, const EventSource::EntityType &state);
 
 #endif // EVENTSOURCE_H

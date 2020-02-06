@@ -37,8 +37,10 @@ QUrl EventSource::getEntityUrl(EventSource::EntityType type) {
         return QUrl((m_url.url() + "/vessel"));
     case ENTITY_TYPE_PUMP:
         return QUrl((m_url.url() + "/pump"));
-
     }
+
+    qWarning() << "Illegal entity type in" << __FUNCTION__;
+    return QUrl();
 }
 
 void EventSource::emitEntityUpdate(EventSource::EntityType type, QVariant data) {
@@ -165,6 +167,9 @@ void EventSource::emitUpdateEvent(const QString &label, const QString &message) 
     } else if (label.startsWith("vessel-chart-")) {
         data = parseJson(message);
         signal = fwrap(&EventSource::updateChart);
+    } else if (label.startsWith("pump-mode-")) {
+        data = parseJson(message);
+        signal = fwrap(&EventSource::updateMode);
     } else {
         qWarning() << "Unhandled event type: " << label;
     }
@@ -197,25 +202,67 @@ void EventSource::updateHandler(QString label, QVariant message) {
 
 void EventSource::setSetpoint(const QString &vessel, double setpoint) {
     QByteArray d = QString("{\"temperature\": %1, \"unit\": \"C\"}").arg(setpoint).toUtf8();
-    putRequest(vessel, d, "setpoint");
+    putRequest(ENTITY_TYPE_VESSEL, vessel, d, "setpoint");
 }
 
-void EventSource::setMode(const QString &vessel, QString mode) {
+void EventSource::setMode(EntityType type, const QString &entity, const QString &mode) {
     QByteArray d = QString("{\"mode\": \"%1\"}").arg(mode).toUtf8();
-    putRequest(vessel, d, "mode");
+    putRequest(type, entity, d, "mode");
 }
 
-void EventSource::putRequest(const QString &vessel, QByteArray &putData, const QString &endpoint) {
-    QUrl setpointUrl = QUrl(m_url.url() + "/vessel/" + vessel + "/" + endpoint);
-    QNetworkRequest req = QNetworkRequest(setpointUrl);
+void EventSource::setVesselMode(const QString &vessel, const QString &mode) {
+    setMode(ENTITY_TYPE_VESSEL, vessel, mode);
+}
+
+void EventSource::setPumpMode(const QString &pump, const QString &mode) {
+    setMode(ENTITY_TYPE_PUMP, pump, mode);
+}
+
+void EventSource::putRequest(EventSource::EntityType type, const QString &entityId, QByteArray &putData, const QString &endpoint = QString()) {
+    QUrl url = QUrl(getEntityUrl(type).url() + "/" + entityId + (endpoint.isEmpty() ? "" : "/" + endpoint));
+    QNetworkRequest req = QNetworkRequest(url);
     req.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
     QNetworkReply *reply = m_nam.put(req, putData);
 
+    qDebug() << "PUT on" << type << "ID: " << entityId << "with data:" << putData << "URL:" << url.url();
+
+    connect(reply, &QNetworkReply::metaDataChanged, [=]() {
+        QVariant statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+        if (!statusCode.isValid())
+            return;
+
+        int status = statusCode.toInt();
+
+        if ( status < 200 || status >= 300){
+            QString reason = reply->attribute( QNetworkRequest::HttpReasonPhraseAttribute ).toString();
+            qDebug() << "ERROR FOR PUT on" << type << "ID:" << entityId << "with data:" << putData
+                     << "URL:" << url.url() << "status" << status << ":" << "reason" << reason;
+        }
+
+        reply->deleteLater();
+    });
+
     connect(reply, &QNetworkReply::readyRead, [=]() {
+        qDebug() << "REPLY FOR PUT on" << type << "ID:" << entityId << "with data:" << putData
+                 << "URL:" << url.url() << ":" << reply->readAll();
+
         if (reply->error() != QNetworkReply::NetworkError::NoError) {
             qWarning() << "Failed to set " << endpoint;
         }
 
         reply->deleteLater();
     });
+}
+
+QDebug operator<<(QDebug debug, const EventSource::EntityType &state) {
+    switch (state) {
+    case EventSource::ENTITY_TYPE_PUMP:
+        debug << "PUMP";
+        break;
+    case EventSource::ENTITY_TYPE_VESSEL:
+        debug << "VESSEL";
+        break;
+    }
+
+    return debug;
 }

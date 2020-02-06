@@ -84,7 +84,7 @@ Item {
             iconColor: mode == "OFF" ?  Constants.gray : Constants.red
 
             TapHandler {
-                onTapped: eventsource.setMode(vesselId, mode == "OFF" ? "PID" : "OFF");
+                onTapped: eventsource.setVesselMode(vesselId, mode == "OFF" ? "PID" : "OFF");
             }
         }
 

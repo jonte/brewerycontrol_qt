@@ -19,6 +19,7 @@ Item {
             }
         }
     }
+
     Grid {
         id: grid
         spacing: 5
